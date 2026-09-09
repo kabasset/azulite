@@ -187,9 +187,17 @@ document.addEventListener('sky:region', ({ detail: { ra, dec, radius } }) => {
 
 // Submit
 
-submit = document.getElementById("open-button")
-submit.addEventListener("click", (e) => {
-    extent = Math.ceil(selectedRadius * 36000) // MER resolution // FIXME from field
+document.getElementById("preview-button")?.addEventListener("click", (e) => {
+    img = document.getElementById("preview-img");
+    img.setAttribute("src", makeUrl(200)) // FIXME size from layout
+})
+
+document.getElementById("open-button")?.addEventListener("click", (e) => {
+    window.open(makeUrl(), "_blank")
+});
+
+function makeUrl(extent = null) {
+    extent = extent ? extent : Math.ceil(selectedRadius * 36000) // MER resolution // FIXME from field
     params = {
         hips: survey_name,
         width: extent,
@@ -202,9 +210,8 @@ submit.addEventListener("click", (e) => {
         rotation_angle: 0,
         format: "png",
     }
-    url = rest("https://alasky.cds.unistra.fr/hips-image-services/hips2fits", params)
-    window.open(url, "_blank")
-});
+    return rest("https://alasky.cds.unistra.fr/hips-image-services/hips2fits", params)
+}
 
 function rest(endpoint, params) {
     var chunks = [];
@@ -212,6 +219,3 @@ function rest(endpoint, params) {
         chunks.push(encodeURIComponent(p) + "=" + encodeURIComponent(params[p]));
     return endpoint + "?" + chunks.join("&");
 }
-
-// https://alasky.cds.unistra.fr/hips-image-services/hips2fits?hips=CDS%2FP%2FEuclid%2FQ1%2Fcolor-azulero&width=2000&height=2000&fov=0.1&projection=SIN&coordsys=icrs&rotation_angle=0.0&object=UGC11116&format=jpg
-// https://alasky.cds.unistra.fr/hips-image-services/hips2fits?hips=Euclid%2FQ1%2FCDS_P_Euclid_Q1_color-azulero&width=200&height=200&projection=SIN&fov=0.028919731113980864&ra=270.9239475741301&dec=67.05532855213839&coordsys=ICRSd&rotation_angle=0&format=png
