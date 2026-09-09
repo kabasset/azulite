@@ -29,7 +29,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 <details id="detailsFind" open>
                     <summary class="section-title">Select target</summary>
                     <div>
-                        <label>Target name</label><input id="targetField" type="text" placeholder="UGC11116">
+                        <label>Name or coordinates</label><input id="targetField" type="text" placeholder="UGC11116">
                     </div>
                     <div>
                         <label>Radius</label><input id="radiusField" type="text" placeholder="0.1">
@@ -52,6 +52,20 @@ SPDX-License-Identifier: GPL-3.0-or-later
                             <span>arcsec</span>
                         </label>
                     </div>
+                </details>
+            </section>
+            <section class="section">
+                <details id="hips2fits" open>
+                    <summary class="section-title">Generate image</summary>
+                    <span>
+                        <button id="preview-button">Preview</button>
+                    </span>
+                    <span>
+                        <button id="open-button">Open</button>
+                    </span>
+                    <span>
+                        <button id="save-button">Save</button>
+                    </span>
                 </details>
             </section>
         </div>
