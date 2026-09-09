@@ -4,6 +4,8 @@
 const containerId = "aladin-lite-div"
 const container = document.getElementById(containerId);
 
+const survey_name = "CDS/P/Euclid/Q1/color-azulero"
+const survey = 'https://alasky.cds.unistra.fr/Euclid/Q1/CDS_P_Euclid_Q1_color-azulero';
 let aladin = null;
 let centerCatalog = null;
 let radiusOverlay = null;
@@ -13,7 +15,7 @@ let dragging = false;
 
 A.init.then(() => {
     aladin = A.aladin('#' + containerId, {
-        survey: 'https://alasky.cds.unistra.fr/Euclid/Q1/CDS_P_Euclid_Q1_color-azulero',
+        survey: survey,
         fov: 0.1,
         target: 'UGC11116',
         cooFrame: 'ICRSd',
@@ -187,7 +189,30 @@ document.addEventListener('sky:region', ({ detail: { ra, dec, radius } }) => {
 
 submit = document.getElementById("open-button")
 submit.addEventListener("click", (e) => {
-    query = ""
-    url = "https://alasky.cds.unistra.fr/hips-image-services/hips2fits/html"
+    extent = Math.ceil(selectedRadius * 36000) // MER resolution // FIXME from field
+    params = {
+        hips: survey_name,
+        width: extent,
+        height: extent,
+        projection: "SIN",
+        fov: selectedRadius * 2,
+        ra: selectedRa,
+        dec: selectedDec,
+        coordsys: "icrs",
+        rotation_angle: 0,
+        format: "png",
+    }
+    url = rest("https://alasky.cds.unistra.fr/hips-image-services/hips2fits", params)
+    alert(url)
     window.open(url, "_blank")
 });
+
+function rest(endpoint, params) {
+    var chunks = [];
+    for (var p in params)
+        chunks.push(encodeURIComponent(p) + "=" + encodeURIComponent(params[p]));
+    return endpoint + "?" + chunks.join("&");
+}
+
+// https://alasky.cds.unistra.fr/hips-image-services/hips2fits?hips=CDS%2FP%2FEuclid%2FQ1%2Fcolor-azulero&width=2000&height=2000&fov=0.1&projection=SIN&coordsys=icrs&rotation_angle=0.0&object=UGC11116&format=jpg
+// https://alasky.cds.unistra.fr/hips-image-services/hips2fits?hips=Euclid%2FQ1%2FCDS_P_Euclid_Q1_color-azulero&width=200&height=200&projection=SIN&fov=0.028919731113980864&ra=270.9239475741301&dec=67.05532855213839&coordsys=ICRSd&rotation_angle=0&format=png
