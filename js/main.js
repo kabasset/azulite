@@ -203,7 +203,6 @@ submit.addEventListener("click", (e) => {
         format: "png",
     }
     url = rest("https://alasky.cds.unistra.fr/hips-image-services/hips2fits", params)
-    alert(url)
     window.open(url, "_blank")
 });
 
