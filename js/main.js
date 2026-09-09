@@ -5,10 +5,10 @@ const containerId = "aladin-lite-div"
 const container = document.getElementById(containerId);
 
 let aladin = null;
-let markerLayer = null;
-let circleOverlay = null;
+let centerCatalog = null;
+let radiusOverlay = null;
 let previewOverlay = null;
-let firstClick = null;
+let center = null;
 let dragging = false;
 
 A.init.then(() => {
@@ -28,12 +28,12 @@ A.init.then(() => {
         showContextMenu: false,
     });
 
-    markerLayer = A.catalog({ shape: 'circle', color: '#4ec9b0', sourceSize: 12 });
-    aladin.addCatalog(markerLayer);
+    centerCatalog = A.catalog({ shape: 'circle', color: '#4ec9b0', sourceSize: 12 });
+    aladin.addCatalog(centerCatalog);
 
-    circleOverlay = A.graphicOverlay({ color: '#8066be', lineWidth: 2 });
+    radiusOverlay = A.graphicOverlay({ color: '#8066be', lineWidth: 2 });
     previewOverlay = A.graphicOverlay({ color: '#be666fff', lineWidth: 1 });
-    aladin.addOverlay(circleOverlay);
+    aladin.addOverlay(radiusOverlay);
     aladin.addOverlay(previewOverlay);
 });
 
@@ -62,22 +62,22 @@ container.addEventListener('pointerup', e => {
 
     const [ra, dec] = radec(e)
 
-    if (!firstClick) {
+    if (!center) {
         // 1st clic → center
-        firstClick = { ra, dec };
-        placeMarker(ra, dec);
-        circleOverlay.removeAll();
+        center = { ra, dec };
+        drawCenter(ra, dec);
+        radiusOverlay.removeAll();
         previewOverlay.removeAll();
-        document.dispatchEvent(new CustomEvent('sky:select', { detail: { ra, dec } }));
+        document.dispatchEvent(new CustomEvent('sky:center', { detail: { ra, dec } }));
     } else {
         // 2nd clic → radius
-        const radius = angularDistance(firstClick.ra, firstClick.dec, ra, dec);
+        const radius = angularDistance(center.ra, center.dec, ra, dec);
         previewOverlay.removeAll();
-        drawCircleOn(circleOverlay, firstClick.ra, firstClick.dec, radius);
+        drawCircleOn(radiusOverlay, center.ra, center.dec, radius);
         document.dispatchEvent(new CustomEvent('sky:region', {
-            detail: { ra: firstClick.ra, dec: firstClick.dec, radius }
+            detail: { ra: center.ra, dec: center.dec, radius }
         }));
-        firstClick = null;
+        center = null;
     }
 });
 
@@ -87,7 +87,7 @@ container.addEventListener('pointerup', e => {
 container.addEventListener('pointermove', e => {
     dragging = true;
 
-    if (!firstClick || !aladin.pix2world) return;
+    if (!center || !aladin.pix2world) return;
 
     const rect = container.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -98,11 +98,11 @@ container.addEventListener('pointermove', e => {
     if (!skyCoords || skyCoords[0] == null) return;
 
     const [raMouse, decMouse] = skyCoords;
-    const radius = angularDistance(firstClick.ra, firstClick.dec, raMouse, decMouse);
+    const radius = angularDistance(center.ra, center.dec, raMouse, decMouse);
 
     previewOverlay.removeAll();
     if (radius > 0) {
-        drawCircleOn(previewOverlay, firstClick.ra, firstClick.dec, radius);
+        drawCircleOn(previewOverlay, center.ra, center.dec, radius);
     }
 });
 
@@ -111,36 +111,36 @@ container.addEventListener('pointermove', e => {
  */
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
-        firstClick = null;
-        circleOverlay.removeAll();
+        center = null;
+        radiusOverlay.removeAll();
         previewOverlay.removeAll();
-        markerLayer.clear();
+        centerCatalog.clear();
     }
 });
 
 // Helpers
 
-function placeMarker(ra, dec) {
-    markerLayer.clear();
-    markerLayer.addSources([A.source(ra, dec)]);
+function drawCenter(ra, dec) {
+    centerCatalog.clear();
+    centerCatalog.addSources([A.source(ra, dec)]);
 }
 
-function goTo(ra, dec) {
+function setCenter(ra, dec) {
     if (!aladin) return;
     aladin.gotoRaDec(ra, dec);
-    placeMarker(ra, dec);
-    firstClick = null;
-    circleOverlay?.removeAll();
+    drawCenter(ra, dec);
+    center = null;
+    radiusOverlay?.removeAll();
     previewOverlay?.removeAll();
 }
 
-function drawCircleOn(overlay, ra, dec, radiusDeg, steps = 64) {
+function drawCircleOn(overlay, ra, dec, radius, steps = 64) {
     const points = [];
-    const decRad = dec * Math.PI / 180;
+    const decRadians = dec * Math.PI / 180;
     for (let i = 0; i < steps; i++) {
         const angle = (i / steps) * 2 * Math.PI;
-        const dRa = (radiusDeg * Math.cos(angle)) / Math.cos(decRad);
-        const dDec = radiusDeg * Math.sin(angle);
+        const dRa = (radius * Math.cos(angle)) / Math.cos(decRadians);
+        const dDec = radius * Math.sin(angle);
         points.push([ra + dRa, dec + dDec]);
     }
     overlay.removeAll();
@@ -148,10 +148,10 @@ function drawCircleOn(overlay, ra, dec, radiusDeg, steps = 64) {
 }
 
 function drawCircle(ra, dec, radius) {
-    if (!aladin || !circleOverlay) return;
-    circleOverlay.removeAll();
+    if (!aladin || !radiusOverlay) return;
+    radiusOverlay.removeAll();
     if (radius == null) return;
-    drawCircleOn(circleOverlay, ra, dec, radius);
+    drawCircleOn(radiusOverlay, ra, dec, radius);
 }
 
 function angularDistance(ra1, dec1, ra2, dec2) {
@@ -161,3 +161,22 @@ function angularDistance(ra1, dec1, ra2, dec2) {
         Math.cos(toRad(dec1)) * Math.cos(toRad(dec2)) * Math.cos(toRad(ra1 - ra2));
     return Math.acos(Math.min(1, Math.max(-1, cos))) * 180 / Math.PI;
 }
+
+let selectedRa;
+let selectedDec;
+let selectedRadius;
+
+document.addEventListener('sky:center', ({ detail: { ra, dec } }) => {
+    selectedRa = ra;
+    selectedDec = dec;
+    document.getElementById('targetField').value = ra.toFixed(6) + "° " + dec.toFixed(6) + "°";
+});
+
+
+document.addEventListener('sky:region', ({ detail: { ra, dec, radius } }) => {
+    selectedRa = ra;
+    selectedDec = dec;
+    selectedRadius = radius;
+    document.getElementById('targetField').value = ra.toFixed(6) + "° " + dec.toFixed(6) + "°";
+    document.getElementById('radiusField').value = radius.toFixed(6) + "°";
+});
