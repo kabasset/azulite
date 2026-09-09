@@ -21,7 +21,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
         <div class="left-pane">
             <div id="aladin-lite-div"></div>
-            <p class="map-hint">Click on the sky to select coordinates, click again to set radius</p>
         </div>
 
         <div class="right-pane">
@@ -34,38 +33,23 @@ SPDX-License-Identifier: GPL-3.0-or-later
                     <div>
                         <label>Radius</label><input id="radiusField" type="text" placeholder="0.1">
                     </div>
-                    <div class="radius-unit">
-                        <label>
-                            <input type="radio" id="radiusDeg" name="unit" value="deg" checked>
-                            <span>deg</span>
-                        </label>
-                    </div>
-                    <div class="radius-unit">
-                        <label>
-                            <input type="radio" id="radiusMin" name="unit" value="arcmin">
-                            <span>arcmin</span>
-                        </label>
-                    </div>
-                    <div class="radius-unit">
-                        <label>
-                            <input type="radio" id="radiusSec" name="unit" value="arcsec">
-                            <span>arcsec</span>
-                        </label>
-                    </div>
                 </details>
             </section>
             <section class="section">
                 <details id="hips2fits" open>
                     <summary class="section-title">Generate image</summary>
-                    <span>
-                        <button id="preview-button">Preview</button>
-                    </span>
-                    <span>
-                        <button id="open-button">Open</button>
-                    </span>
-                    <span>
-                        <button id="save-button">Save</button>
-                    </span>
+                    <div>
+                        <span>
+                            <button id="preview-button">Preview</button>
+                        </span>
+                        <span>
+                            <button id="open-button">Open</button>
+                        </span>
+                    </div>
+                    <summary class="section-title">Preview image</summary>
+                    <div>
+                        <img id="preview-img" src="" />
+                    </div>
                 </details>
             </section>
         </div>
