@@ -162,6 +162,8 @@ function angularDistance(ra1, dec1, ra2, dec2) {
     return Math.acos(Math.min(1, Math.max(-1, cos))) * 180 / Math.PI;
 }
 
+// Fields
+
 let selectedRa;
 let selectedDec;
 let selectedRadius;
@@ -179,4 +181,13 @@ document.addEventListener('sky:region', ({ detail: { ra, dec, radius } }) => {
     selectedRadius = radius;
     document.getElementById('targetField').value = ra.toFixed(6) + "° " + dec.toFixed(6) + "°";
     document.getElementById('radiusField').value = radius.toFixed(6) + "°";
+});
+
+// Submit
+
+submit = document.getElementById("open-button")
+submit.addEventListener("click", (e) => {
+    query = ""
+    url = "https://alasky.cds.unistra.fr/hips-image-services/hips2fits/html"
+    window.open(url, "_blank")
 });
