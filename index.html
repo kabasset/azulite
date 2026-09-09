@@ -1,0 +1,65 @@
+<!-- 
+SPDX-FileCopyrightText: Copyright (C) 2026, Antoine Basset (CNES), Rollin Gimenez (CNES)
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Azulite</title>
+    <link rel="icon" type="image/x-icon" href="img/azumy_favicon.png">
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Mandatory when setting up Aladin Lite v3 for a smartphones/tablet usage -->
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <div class="left-pane">
+            <div id="aladin-lite-div"></div>
+            <p class="map-hint">Click on the sky to select coordinates, click again to set radius</p>
+        </div>
+
+        <div class="right-pane">
+            <section class="section">
+                <details id="detailsFind" open>
+                    <summary class="section-title">Select target</summary>
+                    <div>
+                        <label>Target name</label><input id="targetField" type="text" placeholder="UGC11116">
+                    </div>
+                    <div>
+                        <label>Radius</label><input id="radiusField" type="text" placeholder="0.1">
+                    </div>
+                    <div class="radius-unit">
+                        <label>
+                            <input type="radio" id="radiusDeg" name="unit" value="deg" checked>
+                            <span>deg</span>
+                        </label>
+                    </div>
+                    <div class="radius-unit">
+                        <label>
+                            <input type="radio" id="radiusMin" name="unit" value="arcmin">
+                            <span>arcmin</span>
+                        </label>
+                    </div>
+                    <div class="radius-unit">
+                        <label>
+                            <input type="radio" id="radiusSec" name="unit" value="arcsec">
+                            <span>arcsec</span>
+                        </label>
+                    </div>
+                </details>
+            </section>
+        </div>
+    </div>
+
+    <script src='https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js'></script>
+    <script type="text/javascript" src="js/main.js"></script>
+
+</body>
+
+</html>
