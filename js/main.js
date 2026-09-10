@@ -127,15 +127,6 @@ function drawCenter(ra, dec) {
     centerCatalog.addSources([A.source(ra, dec)]);
 }
 
-function setCenter(ra, dec) {
-    if (!aladin) return;
-    aladin.gotoRaDec(ra, dec);
-    drawCenter(ra, dec);
-    center = null;
-    radiusOverlay?.removeAll();
-    previewOverlay?.removeAll();
-}
-
 function drawCircleOn(overlay, ra, dec, radius, steps = 64) {
     const points = [];
     const decRadians = dec * Math.PI / 180;
@@ -164,6 +155,21 @@ function angularDistance(ra1, dec1, ra2, dec2) {
     return Math.acos(Math.min(1, Math.max(-1, cos))) * 180 / Math.PI;
 }
 
+function setTarget(target, radius) {
+    if (!aladin) return;
+    aladin.gotoObject(target, {
+        error: () => { alert("Unknown target: " + target) },
+        success: () => {
+            const [ra, dec] = aladin.getRaDec();
+            drawCenter(ra, dec);
+            drawCircle(ra, dec, radius);
+            selectedRa = ra
+            selectedDec = dec
+            selectedRadius = radius
+        }
+    });
+}
+
 // Fields
 
 let selectedRa;
@@ -186,6 +192,20 @@ document.addEventListener('sky:region', ({ detail: { ra, dec, radius } }) => {
 });
 
 // Submit
+
+document.getElementById("goto-button")?.addEventListener("click", (e) => {
+    target = document.getElementById("targetField").value
+    radius = document.getElementById("radiusField").value
+    setTarget(target, parseAngle(radius))
+});
+
+function parseAngle(value) {
+    units = { "°": 1, "d": 1, "'": 60, "m": 60, '"': 3600, "s": 3600 }
+    for (u in units) {
+        if (value.endsWith(u)) return Number.parseFloat(value.slice(0, -1)) / units[u];
+    }
+    return Number.parseFloat(value);
+}
 
 document.getElementById("preview-button")?.addEventListener("click", (e) => {
     img = document.getElementById("preview-img");
