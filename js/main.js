@@ -18,7 +18,7 @@ A.init.then(() => {
         survey: survey,
         fov: 0.1,
         target: 'UGC11116',
-        cooFrame: 'ICRSd',
+        cooFrame: 'ICRS',
         showReticle: false,
         showProjectionControl: false,
         showZoomControl: true,
@@ -37,6 +37,12 @@ A.init.then(() => {
     previewOverlay = A.graphicOverlay({ color: '#be666fff', lineWidth: 1 });
     aladin.addOverlay(radiusOverlay);
     aladin.addOverlay(previewOverlay);
+
+    aladin.on("click", (raOrObj, decArg) => {
+        const ra = (raOrObj !== null && typeof raOrObj === "object") ? raOrObj.ra : raOrObj;
+        const dec = (raOrObj !== null && typeof raOrObj === "object") ? raOrObj.dec : decArg;
+        clickRadec(ra, dec);
+    });
 });
 
 /**
@@ -59,20 +65,16 @@ container.addEventListener('pointerdown', e => { dragging = false; });
  * - First click sets center;
  * - Second click sets radius.
  */
-container.addEventListener('pointerup', e => {
+function clickRadec(ra, dec) {
     if (dragging) return;
 
-    const [ra, dec] = radec(e)
-
     if (!center) {
-        // 1st clic → center
         center = { ra, dec };
         drawCenter(ra, dec);
         radiusOverlay.removeAll();
         previewOverlay.removeAll();
         document.dispatchEvent(new CustomEvent('sky:center', { detail: { ra, dec } }));
     } else {
-        // 2nd clic → radius
         const radius = angularDistance(center.ra, center.dec, ra, dec);
         previewOverlay.removeAll();
         drawCircleOn(radiusOverlay, center.ra, center.dec, radius);
@@ -81,7 +83,7 @@ container.addEventListener('pointerup', e => {
         }));
         center = null;
     }
-});
+}
 
 /**
  * Drag or show radius.
@@ -89,18 +91,8 @@ container.addEventListener('pointerup', e => {
 container.addEventListener('pointermove', e => {
     dragging = true;
 
-    if (!center || !aladin.pix2world) return;
-
-    const rect = container.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    // pix2world returns [ra, dec] in degrees
-    const skyCoords = aladin.pix2world(x, y);
-    if (!skyCoords || skyCoords[0] == null) return;
-
-    const [raMouse, decMouse] = skyCoords;
-    const radius = angularDistance(center.ra, center.dec, raMouse, decMouse);
+    const [ra, dec] = radec(e);
+    const radius = angularDistance(center.ra, center.dec, ra, dec);
 
     previewOverlay.removeAll();
     if (radius > 0) {
