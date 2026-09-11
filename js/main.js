@@ -19,8 +19,8 @@ let dragging = false;
 A.init.then(() => {
   aladin = A.aladin("#" + containerId, {
     survey: survey,
-    fov: 0.1,
-    target: "UGC11116",
+    fov: 0.2,
+    target: "ESO201-22",
     cooFrame: "ICRS",
     showReticle: false,
     showProjectionControl: false,
@@ -172,6 +172,7 @@ function setTarget(target, radius) {
       alert("Unknown target: " + target);
     },
     success: () => {
+      aladin.setFoV(radius * 3);
       const [ra, dec] = aladin.getRaDec();
       drawCenter(ra, dec);
       drawCircle(ra, dec, radius);
