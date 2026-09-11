@@ -217,7 +217,9 @@ function parseAngle(value) {
 
 document.getElementById("preview-button")?.addEventListener("click", (e) => {
   img = document.getElementById("preview-img");
-  img.setAttribute("src", makeUrl(200)); // FIXME size from layout
+  img.setAttribute("src", "");
+  extent = img.parentElement.clientWidth;
+  img.setAttribute("src", makeUrl(extent));
 });
 
 document.getElementById("open-button")?.addEventListener("click", (e) => {
