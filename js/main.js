@@ -7,6 +7,8 @@ const container = document.getElementById(containerId);
 const survey_name = "CDS/P/Euclid/Q1/color-azulero";
 const survey =
   "https://alasky.cds.unistra.fr/Euclid/Q1/CDS_P_Euclid_Q1_color-azulero";
+const maxSize = 50000000;
+
 let aladin = null;
 let centerCatalog = null;
 let radiusOverlay = null;
@@ -223,11 +225,22 @@ document.getElementById("preview-button")?.addEventListener("click", (e) => {
 });
 
 document.getElementById("open-button")?.addEventListener("click", (e) => {
-  window.open(makeUrl(), "_blank");
+  url = makeUrl();
+  if (url) {
+    window.open(url, "_blank");
+  }
 });
 
 function makeUrl(extent = null) {
-  extent = extent ? extent : Math.ceil(selectedRadius * 36000); // MER resolution // FIXME from field
+  extent = extent ? extent : Math.ceil(selectedRadius * 36000); // MER resolution
+  // TODO extent/resolution from field?
+  if (extent * extent > maxSize) {
+    if (confirm("Full-resolution image too large.\nScale down?")) {
+      extent = Math.floor(Math.sqrt(maxSize));
+    } else {
+      return;
+    }
+  }
   params = {
     hips: survey_name,
     width: extent,
