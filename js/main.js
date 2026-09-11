@@ -232,6 +232,10 @@ document.getElementById("open-button")?.addEventListener("click", (e) => {
   }
 });
 
+document.getElementById("more-button")?.addEventListener("click", (e) => {
+  window.open(makeHips2FitsUrl(), "_blank");
+});
+
 function makeUrl(extent = null) {
   extent = extent ? extent : Math.ceil(selectedRadius * 36000); // MER resolution
   // TODO extent/resolution from field?
@@ -260,9 +264,23 @@ function makeUrl(extent = null) {
   );
 }
 
-function rest(endpoint, params) {
+function makeHips2FitsUrl() {
+  params = {
+    hips: survey,
+    fov: selectedRadius * 2,
+    ra: selectedRa,
+    dec: selectedDec,
+  };
+  return rest(
+    "https://alasky.cds.unistra.fr/hips-image-services/hips2fits",
+    params,
+    "#",
+  );
+}
+
+function rest(endpoint, params, delim = "?") {
   var chunks = [];
   for (var p in params)
     chunks.push(encodeURIComponent(p) + "=" + encodeURIComponent(params[p]));
-  return endpoint + "?" + chunks.join("&");
+  return endpoint + delim + chunks.join("&");
 }
