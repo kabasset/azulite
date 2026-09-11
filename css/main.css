@@ -208,7 +208,7 @@ button.primary:hover {
     flex: 0 0 30%;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+    gap: 16px;
 }
 
 #aladin-lite-div {
