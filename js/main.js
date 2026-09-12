@@ -45,40 +45,19 @@ A.init.then(() => {
   aladin.addOverlay(radiusOverlay);
   aladin.addOverlay(previewOverlay);
 
-  aladin.on("click", (raOrObj, decArg) => {
-    const ra =
-      raOrObj !== null && typeof raOrObj === "object" ? raOrObj.ra : raOrObj;
-    const dec =
-      raOrObj !== null && typeof raOrObj === "object" ? raOrObj.dec : decArg;
-    clickRadec(ra, dec);
+  aladin.on("click", (e) => {
+    if (!e.isDragging) clickRadec(e.ra, e.dec);
+  });
+
+  aladin.on("mouseMove", (e) => {
+    if (!e.isDragging) moveRadec(e.ra, e.dec);
   });
 });
 
 /**
- * Pointed RA/dec.
- */
-function radec(event) {
-  const rect = container.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
-  return aladin.pix2world(x, y);
-}
-
-/**
- * Reset dragging.
- */
-document.addEventListener("pointerdown", (e) => {
-  dragging = false;
-});
-
-/**
- * Click if not dragging:
- * - First click sets center;
- * - Second click sets radius.
+ * Set center on first click, radius on second click.
  */
 function clickRadec(ra, dec) {
-  if (dragging) return;
-
   if (!center) {
     center = { ra, dec };
     drawCenter(ra, dec);
@@ -100,18 +79,11 @@ function clickRadec(ra, dec) {
   }
 }
 
-container.addEventListener("pointermove", onMove);
-
 /**
- * Drag or show radius.
+ * Show radius.
  */
-function onMove(e) {
-  dragging = true;
-  if (!center) return;
-
-  const [ra, dec] = radec(e);
+function moveRadec(ra, dec) {
   const radius = angularDistance(center.ra, center.dec, ra, dec);
-
   previewOverlay.removeAll();
   if (radius > 0) {
     drawCircleOn(previewOverlay, center.ra, center.dec, radius);
