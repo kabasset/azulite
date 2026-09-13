@@ -13,8 +13,6 @@ let aladin = null;
 let centerCatalog = null;
 let radiusOverlay = null;
 let previewOverlay = null;
-let center = null;
-let dragging = false;
 
 A.init.then(() => {
   aladin = A.aladin("#" + containerId, {
@@ -22,7 +20,7 @@ A.init.then(() => {
     fov: 0.2,
     target: "ESO201-22",
     cooFrame: "ICRS",
-    showReticle: false,
+    showReticle: true,
     showProjectionControl: false,
     showZoomControl: true,
     showFullscreenControl: true,
@@ -40,8 +38,8 @@ A.init.then(() => {
   });
   aladin.addCatalog(centerCatalog);
 
-  radiusOverlay = A.graphicOverlay({ color: "#8066be", lineWidth: 2 });
-  previewOverlay = A.graphicOverlay({ color: "#be666fff", lineWidth: 1 });
+  radiusOverlay = A.graphicOverlay({ lineWidth: 2 });
+  previewOverlay = A.graphicOverlay({ lineWidth: 1 });
   aladin.addOverlay(radiusOverlay);
   aladin.addOverlay(previewOverlay);
 
@@ -54,40 +52,38 @@ A.init.then(() => {
   });
 });
 
+container.addEventListener("pointerout", () => {
+  previewOverlay.removeAll();
+});
+
+function getRadec() {
+  const radec = aladin.getRaDec();
+  return { ra: radec[0], dec: radec[1] };
+}
+
 /**
  * Set center on first click, radius on second click.
  */
 function clickRadec(ra, dec) {
-  if (!center) {
-    center = { ra, dec };
-    drawCenter(ra, dec);
-    radiusOverlay.removeAll();
-    previewOverlay.removeAll();
-    document.dispatchEvent(
-      new CustomEvent("sky:center", { detail: { ra, dec } }),
-    );
-  } else {
-    const radius = angularDistance(center.ra, center.dec, ra, dec);
-    drawCircleOn(radiusOverlay, center.ra, center.dec, radius);
-    previewOverlay.removeAll();
-    document.dispatchEvent(
-      new CustomEvent("sky:region", {
-        detail: { ra: center.ra, dec: center.dec, radius },
-      }),
-    );
-    center = null;
-  }
+  const center = getRadec();
+  const radius = angularDistance(center.ra, center.dec, ra, dec);
+  drawCenter(center.ra, center.dec);
+  drawCircle(radiusOverlay, center.ra, center.dec, radius);
+  previewOverlay.removeAll();
+  document.dispatchEvent(
+    new CustomEvent("sky:region", {
+      detail: { ra: center.ra, dec: center.dec, radius },
+    }),
+  );
 }
 
 /**
  * Show radius.
  */
 function moveRadec(ra, dec) {
+  const center = getRadec();
   const radius = angularDistance(center.ra, center.dec, ra, dec);
-  previewOverlay.removeAll();
-  if (radius > 0) {
-    drawCircleOn(previewOverlay, center.ra, center.dec, radius);
-  }
+  drawCircle(previewOverlay, center.ra, center.dec, radius);
 }
 
 /**
@@ -109,24 +105,10 @@ function drawCenter(ra, dec) {
   centerCatalog.addSources([A.source(ra, dec)]);
 }
 
-function drawCircleOn(overlay, ra, dec, radius, steps = 64) {
-  const points = [];
-  const decRadians = (dec * Math.PI) / 180;
-  for (let i = 0; i < steps; i++) {
-    const angle = (i / steps) * 2 * Math.PI;
-    const dRa = (radius * Math.cos(angle)) / Math.cos(decRadians);
-    const dDec = radius * Math.sin(angle);
-    points.push([ra + dRa, dec + dDec]);
-  }
+function drawCircle(overlay, ra, dec, radius) {
+  if (!aladin || !overlay) return;
   overlay.removeAll();
-  overlay.add(A.polygon(points));
-}
-
-function drawCircle(ra, dec, radius) {
-  if (!aladin || !radiusOverlay) return;
-  radiusOverlay.removeAll();
-  if (radius == null) return;
-  drawCircleOn(radiusOverlay, ra, dec, radius);
+  overlay.add(A.circle(ra, dec, radius));
 }
 
 function angularDistance(ra1, dec1, ra2, dec2) {
@@ -147,7 +129,7 @@ function setTarget(target, radius) {
       aladin.setFoV(radius * 3);
       const [ra, dec] = aladin.getRaDec();
       drawCenter(ra, dec);
-      drawCircle(ra, dec, radius);
+      drawCircle(radiusOverlay, ra, dec, radius);
       selectedRa = ra;
       selectedDec = dec;
       selectedRadius = radius;
@@ -161,14 +143,9 @@ let selectedRa;
 let selectedDec;
 let selectedRadius;
 
-document.addEventListener("sky:center", ({ detail: { ra, dec } }) => {
+document.addEventListener("sky:region", ({ detail: { ra, dec, radius } }) => {
   selectedRa = ra;
   selectedDec = dec;
-  document.getElementById("targetField").value =
-    ra.toFixed(6) + "° " + dec.toFixed(6) + "°";
-});
-
-document.addEventListener("sky:region", ({ detail: { ra, dec, radius } }) => {
   selectedRadius = radius;
   document.getElementById("radiusField").value = radius.toFixed(6) + "°";
 });
