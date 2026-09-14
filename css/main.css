@@ -17,6 +17,14 @@ body {
   min-height: 100vh;
 }
 
+p {
+  margin-bottom: 1em;
+}
+
+a {
+  color: inherit;
+}
+
 header {
   display: flex;
   align-items: center;

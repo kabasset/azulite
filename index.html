@@ -24,7 +24,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
       <div class="map-pane">
         <div
           id="aladin-lite-div"
-          title="Center view and click to select radius."
+          title="Drag to select center, click to select radius."
           oncontextmenu="return false;"
         >
           <p>We're rubbing the magic lamp...</p>
@@ -34,7 +34,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
       <div class="control-pane">
         <div class="box">
           <section class="section">
-            <details id="detailsFind" open>
+            <details id="targetSelection" open>
               <summary class="section-title">Select target</summary>
               <div>
                 <label>Name or coordinates</label
@@ -62,12 +62,43 @@ SPDX-License-Identifier: GPL-3.0-or-later
                   <button id="open-button">Open</button>
                 </span>
                 <span>
-                  <button id="more-button">More controls...</button>
+                  <button id="more-button">More...</button>
                 </span>
               </div>
               <summary class="section-title"></summary>
               <div>
                 <img id="preview-img" src="" alt="Please select a region." />
+              </div>
+            </details>
+          </section>
+          <section class="section">
+            <details id="credits" open>
+              <summary class="section-title">Credits</summary>
+              <div>
+                <p>
+                  Planetarium data: ESA Euclid / Euclid Consortium / NASA /
+                  Q1-2025, image processing by Thomas Boch (CDS) and Antoine
+                  Basset (CNES) with
+                  <a
+                    href="http://doi.org/10.24400/815952/Azulero"
+                    target="_blank"
+                    >Azulero</a
+                  >.
+                </p>
+                <p>
+                  Skymap:
+                  <a href="https://aladin.cds.unistra.fr/AladinLite/doc/"
+                    >Aladin Lite</a
+                  >.
+                </p>
+                <p>
+                  Image generation:
+                  <a
+                    href="https://alasky.cds.unistra.fr/hips-image-services/hips2fits"
+                    >HiPS2FITS</a
+                  >.
+                </p>
+                <p>Website: Rollin Gimenez (CNES) and Antoine Basset (CNES).</p>
               </div>
             </details>
           </section>
