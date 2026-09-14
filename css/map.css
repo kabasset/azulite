@@ -1,0 +1,16 @@
+/**
+ * SPDX-FileCopyrightText: Copyright (C) 2026, Antoine Basset (CNES), Rollin Gimenez (CNES)
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+#aladin-lite-div {
+  width: 100%;
+  height: calc(100vh - 2 * var(--layout-spacing));
+  border: 1px solid #0f2040;
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

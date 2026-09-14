@@ -1,0 +1,50 @@
+/**
+ * SPDX-FileCopyrightText: Copyright (C) 2026, Antoine Basset (CNES), Rollin Gimenez (CNES)
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+:root {
+  --layout-spacing: 16px;
+}
+
+.layout {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: var(--layout-spacing);
+  padding: var(--layout-spacing);
+}
+
+.map-pane {
+  flex: 0 0 70%;
+}
+
+.control-pane {
+  flex: 0 0 30%;
+  overflow: auto;
+  gap: var(--layout-spacing);
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1000px) {
+  .layout {
+    flex-direction: column;
+    bottom: auto;
+  }
+
+  .map-pane,
+  .control-pane {
+    flex: 1 1 100%;
+  }
+
+  #aladin-lite-div {
+    max-height: 80vh;
+  }
+}
