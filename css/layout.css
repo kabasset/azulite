@@ -25,12 +25,12 @@
 .control-pane {
   flex: 0 0 30%;
   overflow: auto;
-  gap: var(--layout-spacing);
 }
 
 .box {
   display: flex;
   flex-direction: column;
+  gap: var(--layout-spacing);
 }
 
 @media (max-width: 1000px) {
