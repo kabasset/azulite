@@ -5,108 +5,93 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Azulite</title>
-    <link rel="icon" type="image/x-icon" href="img/azumy_favicon.png" />
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/layout.css" />
-    <link rel="stylesheet" href="css/map.css" />
-    <!-- Mandatory when setting up Aladin Lite v3 for a smartphones/tablet usage -->
-    <meta
-      name="viewport"
-      content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no"
-    />
-  </head>
 
-  <body>
-    <div class="layout">
-      <div class="map-pane">
-        <div
-          id="aladin-lite-div"
-          title="Drag to select center, click to select radius."
-          oncontextmenu="return false;"
-        >
-          <p>We're rubbing the magic lamp...</p>
-        </div>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>Azulite</title>
+  <link rel="icon" type="image/x-icon" href="azulite.png" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/map.css" />
+  <!-- Mandatory when setting up Aladin Lite v3 for a smartphones/tablet usage -->
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no" />
+</head>
 
-      <div class="control-pane">
-        <div class="box">
-          <section class="section">
-            <details id="targetSelection" open>
-              <summary class="section-title">Select target</summary>
-              <div>
-                <label>Name or coordinates</label
-                ><input id="targetField" type="text" placeholder="ESO201-22" />
-              </div>
-              <div>
-                <label>Radius</label
-                ><input id="radiusField" type="text" placeholder="0.1" />
-              </div>
-              <div>
-                <span>
-                  <button id="goto-button">Go to target</button>
-                </span>
-              </div>
-            </details>
-          </section>
-          <section class="section">
-            <details id="hips2fits" open>
-              <summary class="section-title">Generate image</summary>
-              <div>
-                <span>
-                  <button id="preview-button">Preview</button>
-                </span>
-                <span>
-                  <button id="open-button">Open</button>
-                </span>
-                <span>
-                  <button id="more-button">More...</button>
-                </span>
-              </div>
-              <summary class="section-title"></summary>
-              <div>
-                <img id="preview-img" src="" alt="Please select a region." />
-              </div>
-            </details>
-          </section>
-          <section class="section">
-            <details id="credits" open>
-              <summary class="section-title">Credits</summary>
-              <div>
-                <p>
-                  Planetarium data: ESA Euclid / Euclid Consortium / NASA /
-                  Q1-2025, image processing by Thomas Boch (CDS) and Antoine
-                  Basset (CNES) with
-                  <a
-                    href="http://doi.org/10.24400/815952/Azulero"
-                    target="_blank"
-                    >Azulero</a
-                  >.
-                </p>
-                <p>
-                  Skymap:
-                  <a href="https://aladin.cds.unistra.fr/AladinLite/doc/"
-                    >Aladin Lite</a
-                  >.
-                </p>
-                <p>
-                  Image generation:
-                  <a
-                    href="https://alasky.cds.unistra.fr/hips-image-services/hips2fits"
-                    >HiPS2FITS</a
-                  >.
-                </p>
-                <p>Website: Rollin Gimenez (CNES) and Antoine Basset (CNES).</p>
-              </div>
-            </details>
-          </section>
-        </div>
+<body>
+  <div class="layout">
+    <div class="map-pane">
+      <div id="aladin-lite-div" title="Drag to select center, click to select radius." oncontextmenu="return false;">
+        <p>We're rubbing the magic lamp...</p>
       </div>
     </div>
 
-    <script src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
-  </body>
+    <div class="control-pane">
+      <div class="box">
+        <!-- <h1 style="text-align: center;"><img src="azulite.png" height="32" />Azulite</h1> -->
+        <section class="section">
+          <details id="targetSelection" open>
+            <summary class="section-title">Select target</summary>
+            <div>
+              <label>Name or coordinates</label><input id="targetField" type="text" placeholder="ESO201-22" />
+            </div>
+            <div>
+              <label>Radius</label><input id="radiusField" type="text" placeholder="0.1" />
+            </div>
+            <div>
+              <span>
+                <button id="goto-button">Go to target</button>
+              </span>
+            </div>
+          </details>
+        </section>
+        <section class="section">
+          <details id="hips2fits" open>
+            <summary class="section-title">Generate image</summary>
+            <div>
+              <span>
+                <button id="preview-button">Preview</button>
+              </span>
+              <span>
+                <button id="open-button">Open</button>
+              </span>
+              <span>
+                <button id="more-button">More...</button>
+              </span>
+            </div>
+            <summary class="section-title"></summary>
+            <div>
+              <img id="preview-img" src="" alt="Please select a region." />
+            </div>
+          </details>
+        </section>
+        <section class="section">
+          <details id="credits" open>
+            <summary class="section-title">Credits</summary>
+            <div>
+              <p>
+                Planetarium data: ESA Euclid / Euclid Consortium / NASA /
+                Q1-2025, image processing by Thomas Boch (CDS) and Antoine
+                Basset (CNES) with
+                <a href="http://doi.org/10.24400/815952/Azulero" target="_blank">Azulero</a>.
+              </p>
+              <p>
+                Skymap:
+                <a href="https://aladin.cds.unistra.fr/AladinLite/doc/">Aladin Lite</a>.
+              </p>
+              <p>
+                Image generation:
+                <a href="https://alasky.cds.unistra.fr/hips-image-services/hips2fits">HiPS2FITS</a>.
+              </p>
+              <p>Website: Rollin Gimenez (CNES) and Antoine Basset (CNES).</p>
+            </div>
+          </details>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+</body>
+
 </html>
