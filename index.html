@@ -32,14 +32,14 @@ SPDX-License-Identifier: GPL-3.0-or-later
           <details id="targetSelection" open>
             <summary class="section-title">Select target</summary>
             <form id="form">
-              <div>
+              <div title="Enter central object name or coordinates.">
                 <label>Name or coordinates</label><input id="target-field" type="text" placeholder="ESO201-22" />
               </div>
-              <div>
+              <div title="Enter radius in degrees, minutes or seconds.">
                 <label>Radius</label><input id="radius-field" type="text" placeholder="0.1°" />
               </div>
               <div>
-                <span>
+                <span title="Validate target and update sky map.">
                   <button type="submit" id="goto-button">Go to target</button>
                 </span>
               </div>
@@ -50,13 +50,16 @@ SPDX-License-Identifier: GPL-3.0-or-later
           <details id="hips2fits" open>
             <summary class="section-title">Generate image</summary>
             <div>
-              <span>
+              <span title="Generate and display a preview image.">
                 <button id="preview-button">Preview</button>
               </span>
-              <span>
-                <button id="open-button">Open</button>
+              <span title="Generate an uncompressed PNG image.">
+                <button id="png-button">PNG</button>
               </span>
-              <span>
+              <span title="Generate a compressed JPG image.">
+                <button id="jpg-button">JPG</button>
+              </span>
+              <span title="Open the HiPS2FITS web service.">
                 <button id="more-button">More...</button>
               </span>
             </div>

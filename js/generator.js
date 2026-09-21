@@ -18,7 +18,7 @@ export class Generator {
   preview(ra, dec, radius) {
     this.previewImg.setAttribute("src", "");
     const extent = this.previewImg.parentElement.clientWidth;
-    const url = this.imageUrl(ra, dec, radius, extent);
+    const url = this.imageUrl("png", ra, dec, radius, extent);
     if (url) {
       this.previewImg.setAttribute("src", url);
     }
@@ -27,8 +27,8 @@ export class Generator {
   /**
    * Generate and open the image in a new tab.
    */
-  generate(ra, dec, radius) {
-    const url = this.imageUrl(ra, dec, radius);
+  generate(format, ra, dec, radius) {
+    const url = this.imageUrl(format, ra, dec, radius);
     if (url) {
       window.open(url, "_blank");
     }
@@ -44,7 +44,7 @@ export class Generator {
   /**
    * Generate the image URL.
    */
-  imageUrl(ra, dec, radius, extent = null) {
+  imageUrl(format, ra, dec, radius, extent = null) {
     extent = extent ? extent : Math.ceil(radius * 36000); // MER resolution
     if (extent * extent > maxSize) {
       if (confirm("Full-resolution image too large.\nScale down?")) {
@@ -63,7 +63,7 @@ export class Generator {
       dec: dec,
       coordsys: "icrs",
       rotation_angle: 0,
-      format: "png",
+      format: format,
     };
     return rest(
       "https://alasky.cds.unistra.fr/hips-image-services/hips2fits",

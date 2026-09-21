@@ -11,7 +11,8 @@ const targetField = document.getElementById("target-field");
 const radiusField = document.getElementById("radius-field");
 const gotoButton = document.getElementById("goto-button");
 const previewButton = document.getElementById("preview-button");
-const openButton = document.getElementById("open-button");
+const pngButton = document.getElementById("png-button");
+const jpgButton = document.getElementById("jpg-button");
 const moreButton = document.getElementById("more-button");
 const previewImg = document.getElementById("preview-img");
 
@@ -50,8 +51,12 @@ previewButton.onclick = () => {
   generator.preview(selectedRa, selectedDec, selectedRadius);
 };
 
-openButton.onclick = () => {
-  generator.generate(selectedRa, selectedDec, selectedRadius);
+pngButton.onclick = () => {
+  generator.generate("png", selectedRa, selectedDec, selectedRadius);
+};
+
+jpgButton.onclick = () => {
+  generator.generate("jpg", selectedRa, selectedDec, selectedRadius);
 };
 
 moreButton.onclick = () => {
