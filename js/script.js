@@ -4,8 +4,8 @@
 import { Model } from "./model.js";
 import { Form } from "./form.js";
 import { Map } from "./map.js";
-import { Controller } from "./controller.js";
 
+const targetForm = document.getElementById("form");
 const targetField = document.getElementById("target-field");
 const radiusField = document.getElementById("radius-field");
 const gotoButton = document.getElementById("goto-button");
@@ -26,5 +26,16 @@ document.addEventListener("map:select", ({ detail: { ra, dec, radius } }) => {
   form.setRadius(radius);
   selectedRa = ra;
   selectedDec = dec;
+  selectedRadius = radius;
+});
+
+targetForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const target = form.getTarget();
+  const radius = form.getRadius();
+  map.setTarget(target, radius);
+  const radec = map.getRadec();
+  selectedRa = radec.ra;
+  selectedDec = radec.dec;
   selectedRadius = radius;
 });
