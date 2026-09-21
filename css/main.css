@@ -178,6 +178,10 @@ button:hover {
   color: #fff;
 }
 
+button:active {
+  background-color: #3d85f5;
+}
+
 button:disabled {
   opacity: 0.35;
   cursor: not-allowed;
