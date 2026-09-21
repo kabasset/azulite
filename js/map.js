@@ -8,6 +8,7 @@ const radiusToFovFactor = 3;
  */
 export class Map {
   constructor(container, survey, target, radius) {
+    this.container = container;
     A.init.then(() => {
       this.aladin = A.aladin("#" + container.id, {
         survey: survey,
@@ -81,7 +82,7 @@ export class Map {
     this.drawCircle(this.radiusOverlay, center, radius);
     this.previewOverlay.removeAll();
 
-    document.dispatchEvent(
+    this.container.dispatchEvent(
       new CustomEvent("map:select", {
         detail: { ra: center.ra, dec: center.dec, radius },
       }),
