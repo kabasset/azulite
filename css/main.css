@@ -34,11 +34,15 @@ body {
 
 p {
   line-height: 1.5;
-  margin-bottom: 0.5em;
+  margin-bottom: 1ex;
 }
 
 a {
   color: inherit;
+}
+
+a:hover {
+  color: #fff;
 }
 
 .container {
@@ -51,7 +55,7 @@ a {
   background: var(--theme-box-color);
   border: 1px solid var(--theme-border-color);
   border-radius: 8px;
-  padding: 20px 24px;
+  padding: 16px 24px;
   position: relative;
   overflow: hidden;
 }
@@ -81,7 +85,7 @@ label {
   font-size: 11px;
   font-weight: bold;
   color: var(--theme-color-5);
-  margin-bottom: 0.5em;
+  margin-bottom: 1ex;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -117,14 +121,15 @@ input[type="checkbox"] {
 
 span.button,
 span.key {
-  border: 1px solid var(--theme-frame-color);
-  border-radius: 2px;
-  padding: 2px;
+  border: 1px solid var(--theme-hover-color);
+  border-radius: 4px;
+  padding: 2px 4px;
   display: inline-block;
 }
 
 span.key {
-  box-shadow: 2px 2px var(--theme-hover-color);
+  border: 1px solid var(--theme-frame-color);
+  box-shadow: 1px 1px var(--theme-hover-color);
 }
 
 button {
@@ -140,10 +145,12 @@ button {
 }
 
 button:hover {
+  color: #fff;
   border-color: var(--theme-hover-color);
 }
 
 button:active {
+  color: #fff;
   background-color: var(--theme-color-5);
 }
 
