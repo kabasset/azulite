@@ -1,4 +1,4 @@
-# <img src="azulite.png" style="height: 40px; margin: 0 16px 0 0 !important"/>Azulite
+# <img src="azulite.png" alt="logo" style="height: 40px; margin: 0 16px 0 0 !important"/>Azulite
 
 ## Collect Euclid gems!
 
@@ -13,7 +13,7 @@
 
 [GPL-3.0-or-later](LICENSE)
 
-# Contributors
+## Contributors
 
 * Antoine Basset (CNES)
 * Rollin Gimenez (CNES)
