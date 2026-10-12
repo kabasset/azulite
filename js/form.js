@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: Copyright (C) 2026, Antoine Basset (CNES), Rollin Gimenez (CNES)
 // SPDX-License-Identifier: Apache-2.0
 
+import { randomGalaxy } from "./random.js";
+
 /**
  * Control pane target selection form.
  */
@@ -15,6 +17,14 @@ export class Form {
    */
   getTarget() {
     return this.targetField.value || this.targetField.placeholder;
+  }
+
+  /**
+   * Set a random placeholder.
+   */
+  randomTarget() {
+    this.targetField.placeholder = randomGalaxy();
+    return this.targetField.placeholder;
   }
 
   /**

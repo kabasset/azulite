@@ -21,7 +21,7 @@ const surveyUrl =
   "https://alasky.cds.unistra.fr/Euclid/Q1/CDS_P_Euclid_Q1_color-azulero";
 
 let form = new Form(targetField, radiusField);
-let map = new Map(aladinDiv, surveyUrl, form.getTarget(), form.getRadius());
+let map = new Map(aladinDiv, surveyUrl, form.randomTarget(), form.getRadius());
 let generator = new Generator(surveyName, previewImg);
 
 let selectedRa;
